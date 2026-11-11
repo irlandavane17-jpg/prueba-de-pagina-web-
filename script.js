@@ -50,13 +50,70 @@ mainNav.querySelectorAll("a").forEach((link) => link.addEventListener("click", (
 const infoDialog = document.querySelector(".info-dialog");
 const dialogTitle = document.querySelector("#dialog-title");
 const dialogCopy = document.querySelector(".dialog-copy");
+const dialogServices = document.querySelector(".dialog-services");
+const dialogIncluded = document.querySelector(".dialog-included");
 const serviceInformation = {
-  "Servicios contables": "Conoce las alternativas de servicios contables disponibles con Reyes & Asociados. El alcance y los detalles se revisan de acuerdo con las necesidades de cada cliente.",
-  "Asesoría fiscal": "Consulta con el despacho las opciones de asesoría fiscal. El servicio específico se define de acuerdo con tu situación y las disposiciones aplicables.",
-  "Asesoría corporativa": "Reyes & Asociados ofrece asesoría corporativa. Contáctanos para conversar sobre las necesidades particulares de tu organización.",
-  "Asesoría financiera": "Conoce las alternativas de asesoría financiera disponibles para tu empresa mediante una consulta con nuestro equipo.",
-  "IMSS": "Consulta con el despacho los servicios relacionados con IMSS y el alcance que corresponda a tu caso.",
-  "Otros servicios especializados": "Cuéntanos qué servicio necesitas y el equipo podrá orientarte sobre las alternativas disponibles."
+  "Servicios contables": {
+    description: "Ofrecemos soluciones contables para mantener organizada y actualizada la información financiera de tu negocio, facilitar el control administrativo y cumplir tus obligaciones.",
+    services: [
+      "Asesoría contable",
+      "Facturación electrónica",
+      "Cálculo de impuestos",
+      "Elaboración y análisis de estados financieros",
+      "Administración de nóminas",
+      "Capacitación en el manejo de software",
+      "Planeación financiera",
+      "Asesoría en proyectos de inversión"
+    ]
+  },
+  "Asesoría fiscal": {
+    description: "Brindamos orientación y acompañamiento fiscal para ayudar a personas físicas y morales a cumplir adecuadamente con sus obligaciones tributarias y mejorar la planeación de sus recursos.",
+    services: [
+      "Planeación fiscal",
+      "Cálculo y asesoría de impuestos",
+      "Auditorías fiscales",
+      "Auditorías de IMSS",
+      "Auditorías de control interno",
+      "Constitución y disolución de empresas",
+      "Asesoría en materia fiscal"
+    ]
+  },
+  "Asesoría corporativa": {
+    description: "Apoyamos a las empresas en su organización, administración y toma de decisiones, con herramientas e ideas para aprovechar mejor sus recursos y fortalecer su funcionamiento.",
+    services: [
+      "Gobierno corporativo",
+      "Asesoría patrimonial",
+      "Apoyo en la toma oportuna de decisiones",
+      "Capacitaciones empresariales",
+      "Orientación para el mejor aprovechamiento de recursos",
+      "Enseñanza de mejores prácticas para la administración de recursos"
+    ]
+  },
+  "Asesoría financiera": {
+    description: "Ayudamos a nuestros clientes a comprender, organizar y administrar sus recursos financieros con herramientas de planeación y análisis que contribuyen a una mejor toma de decisiones.",
+    services: [
+      "Elaboración y análisis de estados financieros",
+      "Gestión de recursos ante instituciones públicas y privadas",
+      "Elaboración de planes de negocios",
+      "Planeación financiera",
+      "Asesoría en proyectos de inversión",
+      "Orientación para una mejor administración de los recursos financieros"
+    ]
+  },
+  "Servicios IMSS": {
+    description: "Proporcionamos asesoría y servicios relacionados con las obligaciones patronales y los procedimientos ante el Instituto Mexicano del Seguro Social.",
+    services: [
+      "Alta de empresas",
+      "Declaraciones de riesgos de trabajo",
+      "Planes de pensiones",
+      "Servicio Integral de Registro de Obras de Construcción (SIROC)",
+      "Asesoría relacionada con IMSS"
+    ]
+  },
+  "Asesoría en materia de prevención de lavado de dinero": {
+    description: "Ofrecemos asesoría en materia de prevención de lavado de dinero, orientada al cumplimiento de las disposiciones aplicables a las actividades y operaciones de nuestros clientes.",
+    services: []
+  }
 };
 
 function openInformation(title, description) {
@@ -68,7 +125,16 @@ function openInformation(title, description) {
 
 document.querySelectorAll(".service-info").forEach((button) => {
   button.addEventListener("click", () => {
-    openInformation(button.dataset.service, serviceInformation[button.dataset.service]);
+    const information = serviceInformation[button.dataset.service];
+    dialogServices.replaceChildren(
+      ...information.services.map((service) => {
+        const item = document.createElement("li");
+        item.textContent = service;
+        return item;
+      })
+    );
+    dialogIncluded.hidden = information.services.length === 0;
+    openInformation(button.dataset.service, information.description);
   });
 });
 const simulatorTabs = [...document.querySelectorAll(".simulator-tab")];
@@ -169,6 +235,7 @@ document.querySelectorAll('[data-calculator="pension"] input[name="retirementAge
   });
 });
 document.querySelector(".dialog-close").addEventListener("click", () => infoDialog.close());
+document.querySelector(".dialog-back").addEventListener("click", () => infoDialog.close());
 infoDialog.addEventListener("click", (event) => {
   if (event.target === infoDialog) infoDialog.close();
 });
